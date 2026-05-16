@@ -1,7 +1,7 @@
 # -------------------------------------------------------------------------
 # Se importan los modulos requeridos, algunos completos, y uno con alias
 # -------------------------------------------------------------------------
-
+ 
 from clase import Participante
 import csv, json, re
 import datetime as dt
