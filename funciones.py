@@ -245,3 +245,136 @@ def mod_participante(lista: list) -> None:
                 return
             
             print("No hay un participante registrado con ese correo")
+
+#--------------------------------------------------------------------------
+#   Función que elimina el registro de un participante (Jesus)
+#--------------------------------------------------------------------------
+
+def del_participante(lista: list) -> None:
+
+    while True:
+        if len(lista) == 0:
+            print("")
+            print("No hay participantes registrados")
+
+        print("")
+        email = validar_email()
+
+        for c in lista:
+
+            largo = 0
+            ancho = max(len(str(c.correo)), len(str(c.nombre)), len(str(c.fecha_nac)), len(str(c.fecha_reg)), len(str(c.hora_reg)))
+            if largo < ancho:
+                largo = ancho
+            largo += 3
+
+            if email == c.correo:
+                print(f"{"Correo": <{largo}} | {"Nombre": <{largo}} | {"Fecha de nac.": <{largo}} | {"Fecha de reg.": <{largo}} | {"Hora de reg.": <{largo}}")
+                print(f"{c.correo: <{largo}} | {c.nombre: <{largo}} | {c.fecha_nac: <{largo}} | {c.fecha_reg: <{largo}} | {c.hora_reg: <{largo}}")
+                print("")
+                borrar = input("¿Desea eliminar este registro? (Y/N): ")
+                if borrar == "Y" or borrar == "y":
+                    a = check_email(email, lista)
+                    lista.pop(a)
+                elif borrar == "N" or borrar == "n":
+                    return
+                else:
+                    print("Opción no válida")
+
+                print("")
+                print("Participante eliminado con éxito")
+                return
+            
+            print("No hay un participante registrado con ese correo")
+
+#--------------------------------------------------------------------------
+#   Función que muestra la lista completa de participantes resgistrados (Jesus)
+#--------------------------------------------------------------------------
+
+def lista_participantes(lista: list) -> None:
+    
+    if len(lista) == 0:
+        print("")
+        print("No hay participantes registrados")
+        return
+    
+    largo = 0
+
+    print("")
+    for c in lista:
+        ancho = max(len(str(c.correo)), len(str(c.nombre)), len(str(c.fecha_nac)), len(str(c.fecha_reg)), len(str(c.hora_reg)))
+        if largo < ancho:
+            largo = ancho
+    largo += 3
+
+    print(f"{"Correo": <{largo}} | {"Nombre": <{largo}} | {"Fecha de nac.": <{largo}} | {"Fecha de reg.": <{largo}} | {"Hora de reg.": <{largo}}")
+    print("— " * (largo * 2 + 15))
+
+    for c in lista:
+        print(f"{c.correo: <{largo}} | {c.nombre: <{largo}} | {c.fecha_nac: <{largo}} | {c.fecha_reg: <{largo}} | {c.hora_reg: <{largo}}")
+        print("— " * (largo * 2 + 15))
+    
+    return
+
+#--------------------------------------------------------------------------
+#   Función que actualiza los datos en un nuevo CSV, y elimina el anterior (Jesus)
+#--------------------------------------------------------------------------
+
+def upd_info(lista: list) -> None:
+
+    with open('csv_lista.csv', 'wt', newline='', encoding='utf-8') as doc:
+
+        csvout = csv.writer(doc, delimiter='|')
+
+        csvout.writerow([
+            "Correo",
+            "Nombre",
+            "Fecha de nac.",
+            "Fecha de reg.",
+            "Hora de reg."
+        ])
+
+        datos = []
+
+        for p in lista:
+            part = [
+                p.correo,
+                p.nombre,
+                p.fecha_nac,
+                p.fecha_reg,
+                p.hora_reg
+            ]
+
+            datos.append(part)
+
+        csvout.writerows(datos)
+
+    print("Archivo CSV actualizado")
+
+#--------------------------------------------------------------------------
+#   Función para serializar la lista de objetos a JSON (Jesus)
+#--------------------------------------------------------------------------
+
+def serializar(lista: list) -> None:
+
+    parts = []
+
+    for p in lista:
+
+        part = {
+            "correo": p.correo,
+            "nombre": p.nombre,
+            "fecha_nac": p.fecha_nac,
+            "fecha_reg": p.fecha_reg,
+            "hora_reg": p.hora_reg
+        }
+
+        parts.append(part)
+
+    with open('csv_lista.json', 'wt', encoding='utf-8') as doc:
+
+        json.dump(parts, doc, indent=4, ensure_ascii=False)
+
+    print("\nArchivo JSON creado")
+
+#   tung tung tung sahur
