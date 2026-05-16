@@ -1,30 +1,30 @@
+import funciones as fun
+
 # --------------------------------------------------------------------------
 # Modulo que ejecuta las funciones en base a una funcion de menu (Arturo)
 # --------------------------------------------------------------------------
 
-from funciones import *
-
 participantes = list()
-info = cargar_info(participantes)
+info = fun.cargar_info(participantes)
 
 while True:
-    home = menu()
+    home = fun.menu()
     if home == 1:
-        x = cargar_info(participantes)
+        x = fun.cargar_info(participantes)
     elif home == 2:
-        x = registrar_participante(participantes)
+        x = fun.registrar_participante(participantes)
     elif home == 3:
-        x = buscar_participante(participantes)
+        x = fun.buscar_participante(participantes)
     elif home == 4:
-        x = mod_participante(participantes)
+        x = fun.mod_participante(participantes)
     elif home == 5:
-        x = del_participante(participantes)
+        x = fun.del_participante(participantes)
     elif home == 6:
-        lista_participantes(participantes)
+        fun.lista_participantes(participantes)
     elif home == 7:
-        x = upd_info(participantes)
+        x = fun.upd_info(participantes)
     elif home == 8:
-        x = serializar(participantes)
+        x = fun.serializar(participantes)
         print("")
         print(x)
     elif home == "X" or home == "x":
