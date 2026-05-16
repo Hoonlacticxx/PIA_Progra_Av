@@ -1,3 +1,7 @@
+# --------------------------------------------------------------------------
+# Modulo que ejecuta las funciones en base a una funcion de menu (Arturo)
+# --------------------------------------------------------------------------
+
 from funciones import *
 
 participantes = list()

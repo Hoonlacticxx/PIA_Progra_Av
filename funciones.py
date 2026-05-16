@@ -119,7 +119,129 @@ def menu() -> int:
             return num
         print("Opción no válida")
         
-# --------------------------------------------------------------------------
-# Modulo que ejecuta las funciones en base a una funcion de menu (Arturo)
-# --------------------------------------------------------------------------
+#------------------------------------------------------
+#   Función que carga la informacion desde CSV
+#   y si no existe, crea uno nuevo (Brayan)
+#------------------------------------------------------
 
+def cargar_info(lista: list) -> None:
+
+    try:
+        with open('csv_lista.csv', 'rt') as doc:
+            lines = csv.reader(doc, delimiter='|')
+            next(lines, None)
+            if lines == "":
+                print("")
+                print("Error. Archivo CSV vacio. No hay lista de participantes para cargar")
+                return
+            for l in lines:
+                n_participante = Participante(l[0], l[1], l[2], l[3], l[4])
+                lista.append(n_participante)
+                print("")
+            print("Lista de participantes cargada con exito")
+        return
+    
+    except FileNotFoundError as e:
+        print("")
+        print(f"Error: {e}. Se creará un nuevo archivo CSV")
+        with open('csv_lista.csv', 'wt', newline='') as doc:
+            csvout = csv.writer(doc, delimiter='|')
+            csvout.writerow(["Correo", "Nombre", "Fecha de nac."])
+        return
+    
+#--------------------------------------------------------------------------
+#   Función que registra a un nuevo participante (Brayan)
+#--------------------------------------------------------------------------
+
+def registrar_participante(lista: list) -> None:
+
+    while True:
+        print("")
+        email = validar_email()
+        if email == "":
+            break
+        if check_email(email, lista) != -1:
+            print("")
+            print("Ese correo ya está registrado")
+            break
+        elif check_email(email, lista) == -1:
+            nombre = get_nombre()
+            f_nac = get_fecha("su fecha de nacimiento")
+            f_nac_form = f_nac.strftime("%d-%m-%Y")
+            f_reg = dt.date.today()
+            f_reg_form = f_reg.strftime("%d-%m-%Y")
+            h_reg = dt.datetime.now()
+            h_reg_form = h_reg.strftime("%H:%M:%S")
+            lista.append(Participante(email, nombre, f_nac_form, f_reg_form, h_reg_form))
+            print("")
+            print("Participante registrado con éxito")
+            return
+    return
+
+#--------------------------------------------------------------------------
+#   Función que busca la información de un participante (Brayan)
+#--------------------------------------------------------------------------
+
+def buscar_participante(lista: list) -> None:
+
+    if len(lista) == 0:
+        print("")
+        print("No hay participantes registrados")
+        return
+    
+    while True:
+        print("")
+        email = validar_email()
+        if email == "":
+            break
+        for c in lista:
+            if email == c.correo:
+                ancho = max(len(str(c.correo)), len(str(c.nombre)), len(str(c.fecha_nac)), len(str(c.fecha_reg)), len(str(c.hora_reg)))
+                ancho += 3
+                print(f"{"Nombre": <{ancho}} | {"Correo": <{ancho}} | {"F. de nac.": <{ancho}} | {"F. de registro": <{ancho}} | {"Hora de reg.": <{ancho}}")
+                print(f"{c.nombre: <{ancho}} | {c.correo: <{ancho}} | {c.fecha_nac: <{ancho}} | {c.fecha_reg: <{ancho}} | {c.hora_reg: <{ancho}}")
+                return 
+            else:
+                print("")
+                print("No hay un participante con ese correo registrado")
+                return
+
+            
+#--------------------------------------------------------------------------
+#   Función para modificar la información de un participante (Brayan)
+#--------------------------------------------------------------------------
+
+def mod_participante(lista: list) -> None:
+
+    while True:
+        if len(lista) == 0:
+            print("")
+            print("No hay participantes registrados")
+
+        print("")
+        email = validar_email()
+
+        if email == "":
+            break
+
+        for c in lista:
+            if email == c.correo:
+
+                print("")
+                print("Si no relizará cambios en un atributo, solo presione Enter")
+                n_correo = validar_email()
+                n_nombre = get_nombre()
+                n_fecha_nac = fecha("fecha de nacimiento")
+
+                if n_correo:
+                    c.correo = n_correo
+                if n_nombre:
+                    c.nombre = n_nombre
+                if n_fecha_nac:
+                    c.fecha_nac = n_fecha_nac.strftime("%d-%m-%Y")
+
+                print("")
+                print("Datos actualizados exitosamente")
+                return
+            
+            print("No hay un participante registrado con ese correo")
